@@ -1,0 +1,22 @@
+name: ci-cd
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - run: docker build -t app:${{ github.sha }} .
+      - run: docker push registry/app:${{ github.sha }}
+      - run: kubectl set image deployment/web-deployment web=registry/app:${{ github.sha }}
