@@ -17,3 +17,4 @@ jobs:
       - run: docker build -t danielaag5/app:${{ github.sha }} .
       - run: docker push danielaag5/app:${{ github.sha }}
       - run: kubectl set image deployment/web-deployment web=danielaag5/app:${{ github.sha }}
+        continue-on-error: true
