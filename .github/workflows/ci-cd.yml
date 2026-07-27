@@ -13,6 +13,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    needs: build-test
     steps:
       - run: docker build -t app:${{ github.sha }} .
       - run: docker push registry/app:${{ github.sha }}
